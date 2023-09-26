@@ -1,0 +1,23 @@
+.pagination {
+	display: flex;
+	gap: 0.5rem;
+}
+
+.pagination--top {
+	margin-bottom: 1rem;
+	margin-top: 0.5rem;
+}
+
+.pagination--bottom {
+	margin-top: 1rem;
+}
+
+.pagination__link {
+	font-size: 1.2rem;
+	font-weight: 700;
+}
+
+.pagination__link--active {
+	padding-bottom: 0.01rem;
+	border-bottom: 0.1rem solid #8b8a8a;
+}

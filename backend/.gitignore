@@ -1,0 +1,8 @@
+node_modules
+.keystone/admin
+*.log
+db/*
+.env
+public
+!public/images/.gitkeep
+!public/songs/.gitkeep

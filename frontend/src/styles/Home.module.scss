@@ -1,0 +1,37 @@
+@import "@/styles/mixins";
+
+.splash-container {
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.splash-container--landscape {
+	img {
+		width: 100%;
+		height: auto;
+	}
+}
+
+.splash-container--portrait {
+	display: none;
+	img {
+		width: auto;
+		height: auto;
+		max-width: 99vw;
+		max-height: 99vh;
+	}
+}
+
+@include for-phone-only {
+	.splash-container--landscape {
+		display: none;
+	}
+
+	.splash-container--portrait {
+		display: flex;
+	}
+}

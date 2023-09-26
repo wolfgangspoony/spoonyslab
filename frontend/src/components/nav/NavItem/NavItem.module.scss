@@ -1,0 +1,13 @@
+.nav-item {
+    a {
+        border-bottom: 2px solid rgba(147, 145, 155, 0);
+        transition: 0.2s;
+        color: #FFA07A;
+        text-transform: uppercase;
+    }
+
+    a:hover,
+    &.nav-item--active a {
+        border-bottom: 2px solid #8b8a8a;
+    }
+}

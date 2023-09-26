@@ -1,0 +1,45 @@
+@import "@/styles/mixins";
+
+.card {
+    background-color: #383838;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem 0.4rem;
+    align-items: center;
+    border-radius: 0.5rem;
+
+    a {
+        color: #FFA07A;
+        text-decoration: underline;
+    }
+}
+
+.card__title {
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.card__price, .card__buy {
+    font-size: 1.2rem;
+}
+
+.card__image-container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+        width: 16rem;
+        height: auto;
+    }
+}
+
+.card__player {
+    max-width: 17rem;
+}
+
+// @include for-phone-only {}
+
+
