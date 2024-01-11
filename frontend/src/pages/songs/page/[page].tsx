@@ -1,54 +1,69 @@
-import PageLayout from "@/components/layouts/PageLayout/PageLayout";
-import getClient from "@/lib/api/client";
-import { ApiStorePage } from "@/lib/types";
-import { gql } from "@apollo/client";
 import { NextSeo } from "next-seo";
-import SongsContainer from "@/components/store/SongsContainer/SongsContainer";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import Pagination from "@/components/store/Pagination/Pagination";
-import styles from "@/styles/Songs.module.scss";
+
+import PageLayout from "@/components/layouts/PageLayout/PageLayout";
 import Featured from "@/components/store/Featured/Featured";
+import Pagination from "@/components/store/Pagination/Pagination";
+import SongsContainer from "@/components/store/SongsContainer/SongsContainer";
+import StoreHeader from "@/components/store/StoreHeader/StoreHeader";
+import getClient from "@/lib/api/client";
+import { StorePageProps } from "@/lib/types";
+import styles from "@/styles/Songs.module.scss";
+import { gql } from "@apollo/client";
 
 const perPage = 4 * 3;
 
 async function getSongsPageData() {
-	const result = await getClient().query({
-		query: gql`
-			query SongsPage {
-				songsPage {
-					header
-					featuredHeader
-					featuredSongs {
-						id
-						title
-						price
-						createdAt
-						songPreview {
+	try {
+		const result = await getClient().query({
+			query: gql`
+				query SongsPage {
+					songsPage {
+						textBlock {
+							document
+						}
+						profilePicture {
 							url
 						}
-						thumbnail {
-							url
+						featuredHeader
+						featuredSongs {
+							id
+							title
+							datePosted
+							createdAt
+							songPreview {
+								url
+							}
+							thumbnail {
+								url
+							}
 						}
 					}
 				}
-			}
-		`,
-	});
+			`,
+		});
 
-	if (result.error || !result || !result.data || !result.data.songsPage) {
+		if (result.error || !result || !result.data || !result.data.songsPage) {
+			return null;
+		}
+
+		const textBlock = result.data.songsPage.textBlock?.document;
+		const profilePicture = result.data.songsPage.profilePicture;
+		const featuredHeader = result.data.songsPage.featuredHeader;
+		const featuredSongs = result.data.songsPage.featuredSongs;
+
+		return {
+			textBlock,
+			profilePicture,
+			featuredHeader,
+			featuredSongs,
+		};
+	} catch (error) {
+		console.error("Error fetching songs page data");
+		console.error(JSON.stringify(error, null, 2));
 		return null;
 	}
-
-	const header = result.data.songsPage.header;
-	const featuredHeader = result.data.songsPage.featuredHeader;
-	const featuredSongs = result.data.songsPage.featuredSongs;
-
-	return {
-		header,
-		featuredHeader,
-		featuredSongs,
-	};
 }
 
 async function getSongs(page: number) {
@@ -64,7 +79,7 @@ async function getSongs(page: number) {
 				songs(orderBy: $orderBy, skip: $skip, take: $take) {
 					id
 					title
-					price
+					datePosted
 					createdAt
 					songPreview {
 						url
@@ -148,7 +163,7 @@ export async function getStaticPaths() {
 	};
 }
 
-export default function Page({ data }: { data: ApiStorePage | undefined }) {
+export default function Page({ data }: { data: StorePageProps | undefined }) {
 	const router = useRouter();
 
 	const currentPage = data?.currentPage;
@@ -162,12 +177,16 @@ export default function Page({ data }: { data: ApiStorePage | undefined }) {
 	const showFeatured = currentPage === 1;
 
 	return (
-		<PageLayout title={data?.songsPage?.header}>
+		<PageLayout>
 			<NextSeo
 				title={`Songs ${currentPage != 1 ? `Page ${currentPage}` : ""}`}
 			/>
 			{data && currentPage != undefined && (
 				<>
+					<StoreHeader
+						profilePic={data.songsPage?.profilePicture?.url}
+						content={data.songsPage?.textBlock}
+					/>
 					{showFeatured && (
 						<Featured
 							songs={data.songsPage?.featuredSongs || []}

@@ -6,3 +6,4 @@ db/*
 public
 !public/images/.gitkeep
 !public/songs/.gitkeep
+!db/.gitkeep

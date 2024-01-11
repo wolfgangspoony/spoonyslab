@@ -1,29 +1,11 @@
-import Header from "@/components/shared/Header/Header";
-import styles from "./AboutSection.module.scss";
-import {
-	DocumentRenderer,
-	DocumentRendererProps,
-} from "@keystone-6/document-renderer";
+import RenderDocument from "@/components/shared/DocRenderer";
 
-const renderers: DocumentRendererProps["renderers"] = {
-	block: {
-		heading: ({ children, textAlign, level }) => {
-			return (
-				<Header
-					type={("h" + level) as any}
-					extraProps={{ style: { textAlign } }}
-				>
-					{children}
-				</Header>
-			);
-		},
-	},
-};
+import styles from "./AboutSection.module.scss";
 
 export default function AboutSection({ content }: { content: any }) {
 	return (
 		<section className={styles["about"]}>
-			<DocumentRenderer renderers={renderers} document={content} />
+			<RenderDocument content={content} />
 		</section>
 	);
 }

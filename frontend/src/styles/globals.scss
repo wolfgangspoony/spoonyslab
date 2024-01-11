@@ -5,8 +5,14 @@
 }
 
 a {
-  color: #EAEAEA;
+  color: #247dac;
   text-decoration: none;
+  font-weight: bold;
+  transition: text-shadow 0.1s ease-in;
+
+  &:hover {
+    text-shadow: 0 0 9px #247dac;
+  }
 }
 
 html {

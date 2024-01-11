@@ -23,7 +23,7 @@ model User {
 model Song {
   id                           String      @id @default(cuid())
   title                        String      @default("")
-  price                        Float
+  datePosted                   String      @default("")
   thumbnail_filesize           Int?
   thumbnail_extension          String?
   thumbnail_width              Int?
@@ -35,25 +35,16 @@ model Song {
   from_SongsPage_featuredSongs SongsPage[] @relation("SongsPage_featuredSongs")
 }
 
-model HomePage {
-  id                       Int     @id
-  splash_filesize          Int?
-  splash_extension         String?
-  splash_width             Int?
-  splash_height            Int?
-  splash_id                String?
-  splashPortrait_filesize  Int?
-  splashPortrait_extension String?
-  splashPortrait_width     Int?
-  splashPortrait_height    Int?
-  splashPortrait_id        String?
-}
-
 model SongsPage {
-  id             Int    @id
-  header         String @default("")
-  featuredHeader String @default("")
-  featuredSongs  Song[] @relation("SongsPage_featuredSongs")
+  id                       Int     @id
+  textBlock                String  @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+  profilePicture_filesize  Int?
+  profilePicture_extension String?
+  profilePicture_width     Int?
+  profilePicture_height    Int?
+  profilePicture_id        String?
+  featuredHeader           String  @default("")
+  featuredSongs            Song[]  @relation("SongsPage_featuredSongs")
 }
 
 model AboutPage {

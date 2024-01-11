@@ -36,6 +36,35 @@ module.exports = __toCommonJS(keystone_exports);
 var import_dotenv = __toESM(require("dotenv"));
 var import_core2 = require("@keystone-6/core");
 
+// auth.ts
+var import_auth = require("@keystone-6/auth");
+var import_session = require("@keystone-6/core/session");
+var sessionSecret = process.env.SESSION_SECRET;
+var { withAuth } = (0, import_auth.createAuth)({
+  listKey: "User",
+  identityField: "email",
+  // this is a GraphQL query fragment for fetching what data will be attached to a context.session
+  //   this can be helpful for when you are writing your access control functions
+  //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
+  sessionData: "name createdAt isAdmin",
+  secretField: "password",
+  // WARNING: remove initFirstItem functionality in production
+  //   see https://keystonejs.com/docs/config/auth#init-first-item for more
+  initFirstItem: {
+    // if there are no items in the database, by configuring this field
+    //   you are asking the Keystone AdminUI to create a new user
+    //   providing inputs for these fields
+    fields: ["name", "email", "password", "isAdmin"]
+    // it uses context.sudo() to do this, which bypasses any access control you might have
+    //   you shouldn't use this in production
+  }
+});
+var sessionMaxAge = 60 * 60 * 24 * 30;
+var session = (0, import_session.statelessSessions)({
+  maxAge: sessionMaxAge,
+  secret: sessionSecret
+});
+
 // schema.ts
 var import_core = require("@keystone-6/core");
 var import_access = require("@keystone-6/core/access");
@@ -121,27 +150,28 @@ var lists = {
       // 	isIndexed: "unique",
       // }),
       title: (0, import_fields2.text)({ validation: { isRequired: true } }),
-      price: (0, import_fields2.float)({ validation: { isRequired: true } }),
+      // price: float({ validation: { isRequired: true } }),
+      datePosted: (0, import_fields2.text)({ validation: { isRequired: true } }),
       thumbnail: (0, import_fields2.image)({ storage: "images" }),
       songPreview: (0, import_fields2.file)({ storage: "songs" }),
       createdAt: createdAtNowField
     }
   }),
-  HomePage: (0, import_core.list)({
-    access: {
-      operation: {
-        query: import_access.allowAll,
-        create: isAdmin,
-        update: isAdmin,
-        delete: isAdmin
-      }
-    },
-    isSingleton: true,
-    fields: {
-      splash: (0, import_fields2.image)({ storage: "images" }),
-      splashPortrait: (0, import_fields2.image)({ storage: "images" })
-    }
-  }),
+  // HomePage: list({
+  // 	access: {
+  // 		operation: {
+  // 			query: allowAll,
+  // 			create: isAdmin,
+  // 			update: isAdmin,
+  // 			delete: isAdmin,
+  // 		},
+  // 	},
+  // 	isSingleton: true,
+  // 	fields: {
+  // 		splash: image({ storage: "images" }),
+  // 		splashPortrait: image({ storage: "images" }),
+  // 	},
+  // }),
   SongsPage: (0, import_core.list)({
     access: {
       operation: {
@@ -153,7 +183,13 @@ var lists = {
     },
     isSingleton: true,
     fields: {
-      header: (0, import_fields2.text)(),
+      // header: text(),
+      textBlock: (0, import_fields_document.document)({
+        formatting: true,
+        links: true,
+        dividers: true
+      }),
+      profilePicture: (0, import_fields2.image)({ storage: "images" }),
       featuredHeader: (0, import_fields2.text)(),
       featuredSongs: (0, import_fields2.relationship)({
         ref: "Song",
@@ -180,35 +216,6 @@ var lists = {
     }
   })
 };
-
-// auth.ts
-var import_auth = require("@keystone-6/auth");
-var import_session = require("@keystone-6/core/session");
-var sessionSecret = process.env.SESSION_SECRET;
-var { withAuth } = (0, import_auth.createAuth)({
-  listKey: "User",
-  identityField: "email",
-  // this is a GraphQL query fragment for fetching what data will be attached to a context.session
-  //   this can be helpful for when you are writing your access control functions
-  //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
-  sessionData: "name createdAt isAdmin",
-  secretField: "password",
-  // WARNING: remove initFirstItem functionality in production
-  //   see https://keystonejs.com/docs/config/auth#init-first-item for more
-  initFirstItem: {
-    // if there are no items in the database, by configuring this field
-    //   you are asking the Keystone AdminUI to create a new user
-    //   providing inputs for these fields
-    fields: ["name", "email", "password", "isAdmin"]
-    // it uses context.sudo() to do this, which bypasses any access control you might have
-    //   you shouldn't use this in production
-  }
-});
-var sessionMaxAge = 60 * 60 * 24 * 30;
-var session = (0, import_session.statelessSessions)({
-  maxAge: sessionMaxAge,
-  secret: sessionSecret
-});
 
 // keystone.ts
 import_dotenv.default.config();

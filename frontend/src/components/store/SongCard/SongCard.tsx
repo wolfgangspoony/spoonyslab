@@ -1,7 +1,9 @@
-import { ApiSong } from "@/lib/types";
-import styles from "./SongCard.module.scss";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+
+import { ApiSong } from "@/lib/types";
+
+import styles from "./SongCard.module.scss";
 
 // @mixin for-phone-only {
 //     @media (max-width: 900px) {
@@ -9,15 +11,15 @@ import Image from "next/image";
 //     }
 // }
 
-const email = "spoonyduder@gmail.com";
+// const email = "spoonyduder@gmail.com";
 
 export default function SongCard({ data }: { data: ApiSong }) {
-	const emailSubject = `Purchase Request for ${data.title}`;
-	const emailBody =
-		`Name:\nEmail:\nSong: ${data.title}\nPrice: ${data.price}`.replaceAll(
-			"\n",
-			"%0D"
-		);
+	// const emailSubject = `Purchase Request for ${data.title}`;
+	// const emailBody =
+	// 	`Name:\nEmail:\nSong: ${data.title}\nDate posted: ${data.datePosted}`.replaceAll(
+	// 		"\n",
+	// 		"%0D"
+	// 	);
 
 	return (
 		<div className={styles["card"]}>
@@ -38,13 +40,15 @@ export default function SongCard({ data }: { data: ApiSong }) {
 					src={data.songPreview.url}
 				></audio>
 			)}
-			<p className={styles["card__price"]}>Price: ${data.price}</p>
-			<Link
+			<p className={styles["card__date"]}>
+				Date posted: {data.datePosted}
+			</p>
+			{/* <Link
 				className={styles["card__buy"]}
 				href={`mailto:${email}?subject=${emailSubject}&body=${emailBody}`}
 			>
 				Purchase
-			</Link>
+			</Link> */}
 		</div>
 	);
 }

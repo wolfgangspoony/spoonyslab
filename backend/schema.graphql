@@ -124,7 +124,7 @@ input UserCreateInput {
 type Song {
   id: ID!
   title: String
-  price: Float
+  datePosted: String
   thumbnail: ImageFieldOutput
   songPreview: FileFieldOutput
   createdAt: DateTime
@@ -162,31 +162,20 @@ input SongWhereInput {
   NOT: [SongWhereInput!]
   id: IDFilter
   title: StringFilter
-  price: FloatFilter
+  datePosted: StringFilter
   createdAt: DateTimeNullableFilter
-}
-
-input FloatFilter {
-  equals: Float
-  in: [Float!]
-  notIn: [Float!]
-  lt: Float
-  lte: Float
-  gt: Float
-  gte: Float
-  not: FloatFilter
 }
 
 input SongOrderByInput {
   id: OrderDirection
   title: OrderDirection
-  price: OrderDirection
+  datePosted: OrderDirection
   createdAt: OrderDirection
 }
 
 input SongUpdateInput {
   title: String
-  price: Float
+  datePosted: String
   thumbnail: ImageFieldInput
   songPreview: FileFieldInput
   createdAt: DateTime
@@ -210,54 +199,23 @@ input SongUpdateArgs {
 
 input SongCreateInput {
   title: String
-  price: Float
+  datePosted: String
   thumbnail: ImageFieldInput
   songPreview: FileFieldInput
   createdAt: DateTime
 }
 
-type HomePage {
-  id: ID!
-  splash: ImageFieldOutput
-  splashPortrait: ImageFieldOutput
-}
-
-input HomePageWhereUniqueInput {
-  id: ID
-}
-
-input HomePageWhereInput {
-  AND: [HomePageWhereInput!]
-  OR: [HomePageWhereInput!]
-  NOT: [HomePageWhereInput!]
-  id: IDFilter
-}
-
-input HomePageOrderByInput {
-  id: OrderDirection
-}
-
-input HomePageUpdateInput {
-  splash: ImageFieldInput
-  splashPortrait: ImageFieldInput
-}
-
-input HomePageUpdateArgs {
-  where: HomePageWhereUniqueInput! = {id: 1}
-  data: HomePageUpdateInput!
-}
-
-input HomePageCreateInput {
-  splash: ImageFieldInput
-  splashPortrait: ImageFieldInput
-}
-
 type SongsPage {
   id: ID!
-  header: String
+  textBlock: SongsPage_textBlock_Document
+  profilePicture: ImageFieldOutput
   featuredHeader: String
   featuredSongs(where: SongWhereInput! = {}, orderBy: [SongOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SongWhereUniqueInput): [Song!]
   featuredSongsCount(where: SongWhereInput! = {}): Int
+}
+
+type SongsPage_textBlock_Document {
+  document(hydrateRelationships: Boolean! = false): JSON!
 }
 
 input SongsPageWhereUniqueInput {
@@ -269,7 +227,6 @@ input SongsPageWhereInput {
   OR: [SongsPageWhereInput!]
   NOT: [SongsPageWhereInput!]
   id: IDFilter
-  header: StringFilter
   featuredHeader: StringFilter
   featuredSongs: SongManyRelationFilter
 }
@@ -282,12 +239,12 @@ input SongManyRelationFilter {
 
 input SongsPageOrderByInput {
   id: OrderDirection
-  header: OrderDirection
   featuredHeader: OrderDirection
 }
 
 input SongsPageUpdateInput {
-  header: String
+  textBlock: JSON
+  profilePicture: ImageFieldInput
   featuredHeader: String
   featuredSongs: SongRelateToManyForUpdateInput
 }
@@ -305,7 +262,8 @@ input SongsPageUpdateArgs {
 }
 
 input SongsPageCreateInput {
-  header: String
+  textBlock: JSON
+  profilePicture: ImageFieldInput
   featuredHeader: String
   featuredSongs: SongRelateToManyForCreateInput
 }
@@ -370,12 +328,6 @@ type Mutation {
   updateSongs(data: [SongUpdateArgs!]!): [Song]
   deleteSong(where: SongWhereUniqueInput!): Song
   deleteSongs(where: [SongWhereUniqueInput!]!): [Song]
-  createHomePage(data: HomePageCreateInput!): HomePage
-  createHomePages(data: [HomePageCreateInput!]!): [HomePage]
-  updateHomePage(where: HomePageWhereUniqueInput! = {id: 1}, data: HomePageUpdateInput!): HomePage
-  updateHomePages(data: [HomePageUpdateArgs!]!): [HomePage]
-  deleteHomePage(where: HomePageWhereUniqueInput! = {id: 1}): HomePage
-  deleteHomePages(where: [HomePageWhereUniqueInput!]!): [HomePage]
   createSongsPage(data: SongsPageCreateInput!): SongsPage
   createSongsPages(data: [SongsPageCreateInput!]!): [SongsPage]
   updateSongsPage(where: SongsPageWhereUniqueInput! = {id: 1}, data: SongsPageUpdateInput!): SongsPage
@@ -418,9 +370,6 @@ type Query {
   songs(where: SongWhereInput! = {}, orderBy: [SongOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SongWhereUniqueInput): [Song!]
   song(where: SongWhereUniqueInput!): Song
   songsCount(where: SongWhereInput! = {}): Int
-  homePages(where: HomePageWhereInput! = {id: {equals: 1}}, orderBy: [HomePageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: HomePageWhereUniqueInput): [HomePage!]
-  homePage(where: HomePageWhereUniqueInput! = {id: 1}): HomePage
-  homePagesCount(where: HomePageWhereInput! = {id: {equals: 1}}): Int
   songsPages(where: SongsPageWhereInput! = {id: {equals: 1}}, orderBy: [SongsPageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: SongsPageWhereUniqueInput): [SongsPage!]
   songsPage(where: SongsPageWhereUniqueInput! = {id: 1}): SongsPage
   songsPagesCount(where: SongsPageWhereInput! = {id: {equals: 1}}): Int

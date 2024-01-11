@@ -1,6 +1,8 @@
-import NavItem from "@/components/nav/NavItem/NavItem";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+
+import NavItem from "@/components/nav/NavItem/NavItem";
+
 import styles from "./Navbar.module.scss";
 
 // text-shadow: #FC0 1px 0 10px;
@@ -35,8 +37,10 @@ export default function Navbar() {
 					document.documentElement.scrollTop > 50
 			);
 		};
-		window.addEventListener("scroll", update);
 		update();
+
+		window.addEventListener("scroll", update);
+
 		return () => window.removeEventListener("scroll", update);
 	}, []);
 
@@ -48,7 +52,7 @@ export default function Navbar() {
 				(minimizeNav ? styles["navbar--minimized"] : "")
 			}
 		>
-			<Link href="/">
+			<Link href="/songs">
 				<h2 className={styles["navbar__title"]}>
 					<Letter color={"#681e8a"}>S</Letter>
 					<Letter color={"#247dac"}>P</Letter>
@@ -66,8 +70,8 @@ export default function Navbar() {
 			</Link>
 			<nav className={styles["navbar__nav"]}>
 				<ul className={styles["navbar__nav-list"]}>
-					<NavItem href="/" text="Home" />
-					<NavItem href="/songs" text="Songs" />
+					{/* <NavItem href="/" text="Home" /> */}
+					<NavItem href="/songs/page/1" text="Songs" />
 					<NavItem href="/about" text="About" />
 				</ul>
 			</nav>

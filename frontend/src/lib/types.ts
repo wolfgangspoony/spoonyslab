@@ -17,7 +17,7 @@ export interface ApiImage {
 export interface ApiSong {
 	id: string;
 	title: string;
-	price: number;
+	datePosted: string;
 	createdAt: string;
 	songPreview: ApiFile | null;
 	thumbnail: ApiFile | null;
@@ -29,7 +29,8 @@ export interface ApiHomePage {
 }
 
 export interface ApiSongsPage {
-	header: string;
+	textBlock: string;
+	profilePicture: ApiImage | null;
 	featuredHeader: string;
 	featuredSongs: ApiSong[];
 }
@@ -38,7 +39,7 @@ export interface ApiAboutPage {
 	content: any;
 }
 
-export interface ApiStorePage {
+export interface StorePageProps {
 	songs: ApiSong[];
 	songsPage: ApiSongsPage | null;
 	pageCount: number;

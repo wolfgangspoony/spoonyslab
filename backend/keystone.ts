@@ -2,14 +2,16 @@
 //
 // Keystone imports the default export of this file, expecting a Keystone configuration object
 //   you can find out more at https://keystonejs.com/docs/apis/config
+
 import dotenv from "dotenv";
-dotenv.config();
 
 import { config } from "@keystone-6/core";
 
+import { session, withAuth } from "./auth";
 import { lists } from "./schema";
 
-import { withAuth, session } from "./auth";
+dotenv.config();
+
 // import { StorageConfig } from "@keystone-6/core/types";
 
 const {

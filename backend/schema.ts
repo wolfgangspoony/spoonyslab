@@ -4,22 +4,20 @@
 
 import { list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
-
 import {
-	text,
-	password,
 	checkbox,
-	image,
-	float,
 	file,
+	float,
+	image,
+	password,
 	relationship,
+	text,
 } from "@keystone-6/core/fields";
-
 import { document } from "@keystone-6/fields-document";
 
-import type { Lists } from ".keystone/types";
 import { createdAtNowField, isAdmin } from "./utils";
 
+import type { Lists } from ".keystone/types";
 export const lists: Lists = {
 	User: list({
 		access: isAdmin,
@@ -60,7 +58,8 @@ export const lists: Lists = {
 			// 	isIndexed: "unique",
 			// }),
 			title: text({ validation: { isRequired: true } }),
-			price: float({ validation: { isRequired: true } }),
+			// price: float({ validation: { isRequired: true } }),
+			datePosted: text({ validation: { isRequired: true } }),
 
 			thumbnail: image({ storage: "images" }),
 
@@ -70,23 +69,23 @@ export const lists: Lists = {
 		},
 	}),
 
-	HomePage: list({
-		access: {
-			operation: {
-				query: allowAll,
-				create: isAdmin,
-				update: isAdmin,
-				delete: isAdmin,
-			},
-		},
+	// HomePage: list({
+	// 	access: {
+	// 		operation: {
+	// 			query: allowAll,
+	// 			create: isAdmin,
+	// 			update: isAdmin,
+	// 			delete: isAdmin,
+	// 		},
+	// 	},
 
-		isSingleton: true,
+	// 	isSingleton: true,
 
-		fields: {
-			splash: image({ storage: "images" }),
-			splashPortrait: image({ storage: "images" }),
-		},
-	}),
+	// 	fields: {
+	// 		splash: image({ storage: "images" }),
+	// 		splashPortrait: image({ storage: "images" }),
+	// 	},
+	// }),
 
 	SongsPage: list({
 		access: {
@@ -101,7 +100,13 @@ export const lists: Lists = {
 		isSingleton: true,
 
 		fields: {
-			header: text(),
+			// header: text(),
+			textBlock: document({
+				formatting: true,
+				links: true,
+				dividers: true,
+			}),
+			profilePicture: image({ storage: "images" }),
 			featuredHeader: text(),
 			featuredSongs: relationship({
 				ref: "Song",

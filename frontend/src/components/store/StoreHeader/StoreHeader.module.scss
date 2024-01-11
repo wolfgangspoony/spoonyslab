@@ -1,0 +1,23 @@
+@import "@/styles/mixins";
+
+
+.container {
+    width: min(95vw, 70rem);
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 0 1rem;
+	text-wrap: balance;
+}
+
+.img {
+	border-radius: 50%;
+}
+
+@include for-phone-only {
+	.container {
+		flex-direction: column;
+	}
+}
