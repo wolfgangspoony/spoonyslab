@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+
 import styles from "./NavItem.module.scss";
 
 export default function NavItem({
@@ -11,10 +12,13 @@ export default function NavItem({
 }) {
 	const router = useRouter();
 
+	const secondSlashIndex = href.slice(1).indexOf("/");
+	const hrefPrefix =
+		secondSlashIndex != -1 ? href.slice(0, secondSlashIndex + 1) : href;
+
 	const isActive =
-		href == "/"
-			? router.pathname == href
-			: router.pathname.startsWith(href);
+		(href == "/" && router.pathname == href) ||
+		router.pathname.startsWith(hrefPrefix);
 
 	return (
 		<li
